@@ -1,3 +1,3 @@
 ﻿
-using var game = new FallingSand.SandBoxGame();
+using var game = new FallingSand.FallingSand();
 game.Run();
