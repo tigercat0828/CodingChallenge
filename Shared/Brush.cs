@@ -4,21 +4,27 @@ using System;
 using System.Collections.Generic;
 
 namespace Shared;
+
+public enum RectMode {
+    Anchor,
+    Center
+}
+
 public class Brush {
     private readonly BasicEffect basicEffectVertexPositionOnly;
     private readonly BasicEffect basicEffectVertexPositionColor;
     private readonly GraphicsDevice graphicsDevice;
     
     private VertexPosition[] gridVertexPosition;
-    private int _width;
-    private int _height;
-
+    private int m_width;
+    private int m_height;
+    private RectMode m_DrawMode;
     public Brush(GraphicsDevice device, int width, int height) {
         
         graphicsDevice = device;
-        _width = width;
-        _height = height;
-
+        m_width = width;
+        m_height = height;
+        m_DrawMode = RectMode.Anchor;
         basicEffectVertexPositionOnly = new(graphicsDevice) {
             View = Matrix.CreateLookAt(new Vector3(0, 0, 1), Vector3.Zero, Vector3.Up),
             Projection = Matrix.CreateOrthographicOffCenter(0, width, height, 0, 0, 1)
@@ -29,11 +35,34 @@ public class Brush {
             View = Matrix.CreateLookAt(new Vector3(0, 0, 1), Vector3.Zero, Vector3.Up),
             Projection = Matrix.CreateOrthographicOffCenter(0, width, height, 0, 0, 1)
         };
+
+    }
+    
+    private Stack<Matrix> m_Transform = new();
+    public void Translate(int x, int y) {
+        m_Transform.Push(Matrix.CreateTranslation(x, y, 0));
+    }
+
+    public void Rotate(float angleInRadians, Vector3 rotationAxis) {
+        m_Transform.Push(Matrix.CreateFromAxisAngle(rotationAxis, angleInRadians));
+    }
+    public void ApplyTransform() {
+        Matrix matrix = Matrix.Identity;
+        while(m_Transform.Count > 0) {
+            matrix *= m_Transform.Pop();
+        }
+        basicEffectVertexPositionColor.World = matrix;
+        basicEffectVertexPositionOnly.World = matrix;
+    }
+    public void SetBackgroundColor(Color color) {
+        graphicsDevice.Clear(color);
+    }
+    public void SetDrawMode(RectMode mode) {
+        m_DrawMode = mode;
     }
     public void SetColor(Color color) {
         basicEffectVertexPositionOnly.DiffuseColor = color.ToVector3();
     }
-
     public void DrawPoint(int x, int y) {
 
         VertexPosition[] vertices = new VertexPosition[] {
@@ -56,13 +85,24 @@ public class Brush {
     }
     public void DrawRectangleFill(int x, int y, int w, int h) {
 
-        VertexPosition[] vertices = new VertexPosition[4] {
-            new (new Vector3(x, y, 0)),
-            new (new Vector3(x + w, y, 0)),
-            new (new Vector3(x, y + h, 0)),
-            new (new Vector3(x + w, y + h, 0))
-        };
+        VertexPosition[] vertices;
 
+        if(m_DrawMode == RectMode.Anchor) {
+            vertices = new VertexPosition[4] {
+                new (new Vector3(x, y, 0)),
+                new (new Vector3(x + w, y, 0)),
+                new (new Vector3(x, y + h, 0)),
+                new (new Vector3(x + w, y + h, 0))
+            };
+        }
+        else {
+            vertices = new VertexPosition[4] {
+                new (new Vector3(x-w/2,     y-h/2, 0)),
+                new (new Vector3(x-w/2 + w, y-h/2, 0)),
+                new (new Vector3(x-w/2,     y-h/2 + h, 0)),
+                new (new Vector3(x-w/2 + w, y-h/2 + h, 0))
+            };
+        }
         basicEffectVertexPositionOnly.CurrentTechnique.Passes[0].Apply();
         graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices, 0, 2);
     }
@@ -120,13 +160,13 @@ public class Brush {
         List<VertexPosition> vertices = new();
         for (int i = 0; i < rows; i++) {
             vertices.Add(new(new Vector3(0, i * size, 0)));
-            vertices.Add(new(new Vector3(_width, i * size, 0)));
+            vertices.Add(new(new Vector3(m_width, i * size, 0)));
         }
 
         for (int i = 0; i < cols; i++) {
 
             vertices.Add(new(new Vector3(i * size, 0, 0)));
-            vertices.Add(new(new Vector3(i * size, _height, 0)));
+            vertices.Add(new(new Vector3(i * size, m_height, 0)));
         }
         gridVertexPosition = vertices.ToArray();
     }

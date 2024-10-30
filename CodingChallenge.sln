@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpriteSheetAnimation", "Spr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParallaxBackground", "ParallaxBackground\ParallaxBackground.csproj", "{FA034D16-B30E-442A-BAB2-41A365EB2633}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopDownShooter", "TopDownShooter\TopDownShooter.csproj", "{CA7282E5-91CD-4E5F-9D97-520D00FF61C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TopDownShooter", "TopDownShooter\TopDownShooter.csproj", "{CA7282E5-91CD-4E5F-9D97-520D00FF61C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P5tranplant", "P5tranplant\P5tranplant.csproj", "{07A1570D-8EAC-4945-8F2E-2B15400449A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{CA7282E5-91CD-4E5F-9D97-520D00FF61C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA7282E5-91CD-4E5F-9D97-520D00FF61C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA7282E5-91CD-4E5F-9D97-520D00FF61C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07A1570D-8EAC-4945-8F2E-2B15400449A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07A1570D-8EAC-4945-8F2E-2B15400449A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07A1570D-8EAC-4945-8F2E-2B15400449A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07A1570D-8EAC-4945-8F2E-2B15400449A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,6 +55,7 @@ Global
 		SolutionGuid = {57072B91-B9D2-4B5E-A9AD-EAB5B5601C23}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Shared\Shared.projitems*{07a1570d-8eac-4945-8f2e-2b15400449a2}*SharedItemsImports = 5
 		Shared\Shared.projitems*{a0cdbd0e-3a41-42b7-9425-a838bc2c7383}*SharedItemsImports = 13
 		Shared\Shared.projitems*{e80ad5ee-cba7-4767-b9eb-f5ccb175e766}*SharedItemsImports = 5
 	EndGlobalSection
